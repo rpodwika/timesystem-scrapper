@@ -1,0 +1,30 @@
+{
+  "name": "rpodwika/timesystem-scrapper",
+  "description": "A tool to scrap the data from Timesystem",
+  "type": "library",
+  "require": {
+    "symfony/browser-kit": "^4.1",
+    "fabpot/goutte": "^3.2",
+    "guzzlehttp/guzzle": "~6.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.4.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Rpodwika\\TimesystemScrapper\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Rpodwika\\TimesystemScrapper\\Tests\\": "tests/"
+    }
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Robert Podwika",
+      "email": "r.podwika@sportradar.com"
+    }
+  ]
+}
