@@ -19,7 +19,7 @@ class AuthenticatorTest extends TestCase
     public function testAuthReturnsFalseOnWrongCredentials()
     {
         $client = new Client([
-            'base_uri' => 'https://timesystem.sportradar.ag',
+            'base_uri' => 'http://ts.url',
             'timeout' => 2.0,
             'cookies' => true,
         ]);
