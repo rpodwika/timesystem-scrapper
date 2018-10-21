@@ -2,6 +2,9 @@
 
 namespace Rpodwika\TimesystemScrapper\Scrapper;
 
+use Rpodwika\TimesystemScrapper\Domain\Worktime\{
+    Stamp, Worktime
+};
 use Rpodwika\TimesystemScrapper\Timesystem\TimesystemHttpClient;
 
 /**
@@ -26,12 +29,42 @@ class Timesystem
         $this->timesystemClient = $timesystemClient;
     }
 
-
-    public function getWorktime()
+    /**
+     * @return Worktime
+     */
+    public function getWorktime(): Worktime
     {
-        $worktimeTable = $this->timesystemClient->getWorkTime();
+        $worktimeData = $this->timesystemClient->getWorkTime();
+        $workTime = new Worktime();
 
-        exit;
+        for ($i = 0, $count = count($worktimeData['stampIn']); $i < $count; ++$i) {
+            if (0 == intval($worktimeData['stampIn'][$i])) {
+                continue;
+            }
+
+            $stampIn = new \DateTime($worktimeData['stampIn'][$i]);
+            $stampOut = !empty($worktimeData['stampOut'][$i]) ? new \DateTime($worktimeData['stampOut'][$i]) : null;
+
+            $workTime->addStamp(new Stamp($stampIn, $stampOut));
+
+        }
+
+        return $workTime;
     }
 
+    /**
+     * @return array
+     */
+    public function getLoggedUserInformation()
+    {
+        return $this->timesystemClient->getUserInformation();
+    }
+
+    /**
+     * @return array
+     */
+    public function getOfficeLoginStatus()
+    {
+        return $this->timesystemClient->getOfficeLoginStatusInformation();
+    }
 }

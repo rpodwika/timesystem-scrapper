@@ -1,22 +1,27 @@
 <?php
+
+namespace Rpodwika\TimesystemScrapper\Domain\Worktime;
+
 /**
- * Created by PhpStorm.
- * User: robertpodwikamac
- * Date: 20.10.2018
- * Time: 16:04
+ * Class Worktime
+ *
+ * @package Domain\Worktime
  */
-
-namespace Domain\Worktime;
-
-
 class Worktime
 {
     /**
      * @var Stamp[]
      */
-    private $stamp = [];
+    private $stamps = [];
 
+    /**
+     * @var float
+     */
     private $remainingHoursDay;
+
+    /**
+     * @var float
+     */
     private $balance;
 
     /**
@@ -24,6 +29,11 @@ class Worktime
      */
     public function addStamp(Stamp $stamp)
     {
-        $this->stamp[] = $stamp;
+        $this->stamps[] = $stamp;
+    }
+
+    public function getStamps(): array
+    {
+        return $this->stamps;
     }
 }

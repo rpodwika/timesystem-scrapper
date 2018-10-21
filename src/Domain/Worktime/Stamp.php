@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Worktime;
+namespace Rpodwika\TimesystemScrapper\Domain\Worktime;
 
 /**
  * Class Stamp

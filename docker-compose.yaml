@@ -9,13 +9,3 @@ services:
         volumes:
             - ./:/var/www/ts
             - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
-
-    nginx:
-        image: nginx
-        ports:
-            - 8090:80
-        volumes:
-            - ./:/var/www/ts
-            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-        depends_on:
-            - php
