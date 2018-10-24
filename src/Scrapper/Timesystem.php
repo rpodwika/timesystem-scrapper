@@ -67,4 +67,12 @@ class Timesystem
     {
         return $this->timesystemClient->getOfficeLoginStatusInformation();
     }
+
+    /**
+     * @return array
+     */
+    public function getOfficeUsers(): array
+    {
+        return $this->timesystemClient->getOfficeUsers();
+    }
 }

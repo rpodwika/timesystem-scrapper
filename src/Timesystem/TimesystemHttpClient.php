@@ -47,15 +47,21 @@ class TimesystemHttpClient
         try {
             $this->client->request('GET', '/');
 
-            $response = $this->client->request('POST', '/auth/login', [
-                'form_params' => [
-                    'username' => $credentials->getLogin(),
-                    'password' => $credentials->getPassword(),
+            $response = $this->client->request(
+                'POST',
+                '/auth/login',
+                [
+                    'form_params' => [
+                        'username' => $credentials->getLogin(),
+                        'password' => $credentials->getPassword(),
+                    ],
                 ]
-            ]);
+            );
         } catch (ConnectException $connectException) {
-            throw new CouldNotResolveHostException("Could not resolve the host ", $connectException->getCode(),
-                $connectException);
+            throw new CouldNotResolveHostException(
+                "Could not resolve the host ", $connectException->getCode(),
+                $connectException
+            );
         }
 
         return $this->isAuthenticated = self::STATUS_AUTH_OK === strval($response->getBody());
@@ -108,6 +114,8 @@ class TimesystemHttpClient
      * Parse worktime table and return stamp in/outs and daysum
      *
      * @return array
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getWorkTime(): array
     {
@@ -133,6 +141,8 @@ class TimesystemHttpClient
      * Get login status information
      *
      * @return array
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getOfficeLoginStatusInformation(): array
     {
@@ -153,6 +163,29 @@ class TimesystemHttpClient
         }
 
         return $loginStatuses;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOfficeUsers(): array
+    {
+        $loginStatus = $this->client->request('GET', '/overview/index');
+        $officeUsers = [];
+        $regex = '#<select.*name="userid".*?>.*?<\/select>#s';
+
+        if( false !== preg_match($regex, $loginStatus->getBody(), $match) ) {
+            preg_match_all('#<option value="(?<userid>\d{2,5}?)">(?<username>.*?)<\/option>#s', $match[0], $users);
+
+            for ($i = 0, $count = count($users['username']); $i < $count; ++$i) {
+                $officeUsers[] = [
+                    'id' => intval($users['userid'][$i]),
+                    'name' => $users['username'][$i],
+                ];
+            }
+        }
+
+        return $officeUsers;
     }
 
     /**
