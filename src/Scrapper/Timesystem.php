@@ -43,8 +43,12 @@ class Timesystem
             }
 
             $stampIn = new \DateTime($worktimeData['stampIn'][$i]);
-            $stampOut = !empty($worktimeData['stampOut'][$i]) ? new \DateTime($worktimeData['stampOut'][$i]) : null;
 
+            if ('None' === $worktimeData['stampOut'][$i]) {
+                $stampOut = null;
+            } else {
+                $stampOut = !empty($worktimeData['stampOut'][$i]) ? new \DateTime($worktimeData['stampOut'][$i]) : null;
+            }
             $workTime->addStamp(new Stamp($stampIn, $stampOut));
 
         }
@@ -75,4 +79,21 @@ class Timesystem
     {
         return $this->timesystemClient->getOfficeUsers();
     }
+
+    /**
+     * @return string
+     */
+    public function stampIn(): array
+    {
+        return $this->timesystemClient->stampIn();
+    }
+
+    /**
+     * @return string
+     */
+    public function stampOut(): array
+    {
+        return $this->timesystemClient->stampOut();
+    }
+
 }

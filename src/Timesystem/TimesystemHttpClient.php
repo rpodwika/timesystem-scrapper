@@ -41,6 +41,8 @@ class TimesystemHttpClient
      * @param Credentials $credentials
      *
      * @return bool
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function authenticate(Credentials $credentials)
     {
@@ -79,6 +81,8 @@ class TimesystemHttpClient
      * Get user name and id
      *
      * @return array
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getUserInformation(): array
     {
@@ -123,7 +127,7 @@ class TimesystemHttpClient
 
         $workTimeIndex = $this->client->request('GET', '/worktime/index?worktime=0');
         $html = $workTimeIndex->getBody();
-        $regex = '#<tr class="(.*) confirmed" .*\s.*\s.*?<td class="worktime-table-body-in">(?<stampin>[\d\.\s:]+)<\/td>\s.*<td class="worktime-table-body-out">(?<stampout>[\d\.\s:]+).*\s.*<td class="worktime-table-body-daysum">(?<daysum>.*?)<\/td>\s+<td class="worktime-table-head-sumday">(?<monthsum>.*?)<\/td>#';
+        $regex = '#<tr class="(.*) confirmed" .*\s.*\s.*?<td class="worktime-table-body-in">(?<stampin>[\d\.\s:]+)<\/td>\s.*<td class="worktime-table-body-out">(?<stampout>[\d\.\s:]+|None).*\s.*<td class="worktime-table-body-daysum">(?<daysum>.*?)<\/td>\s+<td class="worktime-table-head-sumday">(?<monthsum>.*?)<\/td>#';
 
         if (false != preg_match_all($regex, $html, $match)) {
             return [
@@ -166,7 +170,11 @@ class TimesystemHttpClient
     }
 
     /**
+     * Get office users information
+     *
      * @return array
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getOfficeUsers(): array
     {
@@ -189,7 +197,35 @@ class TimesystemHttpClient
     }
 
     /**
-     * check if user has been logged in
+     * Stamp in the user
+     *
+     * @return array
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function stampIn(): array
+    {
+        $stampIn = $this->client->request('GET', 'stampinout/index/status/2');
+
+        return json_decode($stampIn->getBody(), true);
+    }
+
+    /**
+     * Stamp out the user
+     *
+     * @return array
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function stampOut(): array
+    {
+        $stampIn = $this->client->request('GET', 'stampinout/index/status/1');
+
+        return json_decode($stampIn->getBody(), true);
+    }
+
+    /**
+     * Check if user has been logged in
      */
     private function checkAuthentication(): void
     {
