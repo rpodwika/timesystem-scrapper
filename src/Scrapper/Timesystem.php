@@ -49,7 +49,11 @@ class Timesystem
             } else {
                 $stampOut = !empty($worktimeData['stampOut'][$i]) ? new \DateTime($worktimeData['stampOut'][$i]) : null;
             }
-            $workTime->addStamp(new Stamp($stampIn, $stampOut));
+
+            $sumday = $worktimeData['daySum'][$i];
+
+
+            $workTime->addStamp(new Stamp($sumday, $stampIn, $stampOut));
 
         }
 

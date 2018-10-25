@@ -178,6 +178,8 @@ class TimesystemHttpClient
      */
     public function getOfficeUsers(): array
     {
+        $this->checkAuthentication();
+
         $loginStatus = $this->client->request('GET', '/overview/index');
         $officeUsers = [];
         $regex = '#<select.*name="userid".*?>.*?<\/select>#s';
@@ -205,6 +207,8 @@ class TimesystemHttpClient
      */
     public function stampIn(): array
     {
+        $this->checkAuthentication();
+
         $stampIn = $this->client->request('GET', 'stampinout/index/status/2');
 
         return json_decode($stampIn->getBody(), true);
@@ -219,6 +223,8 @@ class TimesystemHttpClient
      */
     public function stampOut(): array
     {
+        $this->checkAuthentication();
+
         $stampIn = $this->client->request('GET', 'stampinout/index/status/1');
 
         return json_decode($stampIn->getBody(), true);

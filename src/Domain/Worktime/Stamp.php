@@ -20,14 +20,30 @@ class Stamp
     private $out;
 
     /**
-     * Stamp constructor.
-     * @param $in
-     * @param $out
+     * @var float
      */
-    public function __construct(\DateTime $in, ?\DateTime $out = null)
+    private $sumday;
+
+    /**
+     * Stamp constructor.
+     *
+     * @param $sumday
+     * @param \DateTime $in
+     * @param \DateTime|null $out
+     */
+    public function __construct($sumday, \DateTime $in, ?\DateTime $out = null)
     {
+        $this->sumday = $sumday;
         $this->in = $in;
         $this->out = $out;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSumday()
+    {
+        return $this->sumday;
     }
 
     /**
